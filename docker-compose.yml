@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  env:
+    #build: .
+    image: yuhengy/formal-tutorial
+    volumes:
+      - .:/workspace
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t

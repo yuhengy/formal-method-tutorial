@@ -1,6 +1,25 @@
 
+## pwd is always in formal-method-intro folder
 
-raco test src/traffic-light-bounded.rkt
-raco test src/traffic-light-unbounded1.rkt
-raco test src/traffic-light-unbounded2.rkt
+## docker
+# docker compose up -d
+# docker compose exec env bash --login
+# docker compose stop
+# docker compose down --rmi all
+# cd workspace
+
+
+## Racket
+# raco test src/traffic-light-bounded.rkt
+# raco test src/traffic-light-unbounded1.rkt
+# raco test src/traffic-light-unbounded2.rkt
+
+
+
+## shortcuts for coq
+# Use vim to open the file
+# Ctrl+j : evaluate for next line
+# Ctil+k : un-evaluate for current line
+# \ c l (type them one-by-one) : evalutate/un-evaluate to current line of cursor
+
 

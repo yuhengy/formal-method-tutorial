@@ -1,0 +1,120 @@
+\documentclass{article}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% PREAMBLES BEGIN %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[lmargin=1.5in, lmargin=1.5in, tmargin=0.5in, bmargin=0.5in]{geometry} % page size
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath} % for align
+\usepackage{hyperref} % for url
+
+
+
+
+%%%% Title Formats BEGIN %%%%
+\renewcommand\thesubsection{\thesection.\alph{subsection}}
+%%%% Title Formats END %%%%
+
+
+
+
+%%%% Comments BEGIN %%%%
+\usepackage[dvipsnames]{xcolor}
+
+\newif\ifdraft % set to false to remove comments and todos
+\drafttrue
+%\draftfalse
+
+\newcommand{\yuheng}[1]{\ifdraft{{\footnotesize\color{purple}[Yuheng: #1]}}\fi}
+%%%% Comments END %%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%% PREAMBLES END %%%%
+%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+\title{Formal Method on Hardware Security}
+\author{}
+\date{September 2022}
+
+\begin{document}
+
+\maketitle
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% SECTIONS BEGIN %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{A Note on Induction}
+
+
+\paragraph{A Mistake from Last Week.}
+Last week, we have a state machine and want to verify a property hold for each state of the machine.
+Formally,
+\begin{align*}
+& \forall ~~ \text{input} ~~ in_0, in_1, \dots, in_n, \\
+& \text{Let} ~~ S_0 \xrightarrow[]{in_0} S_{1} \xrightarrow[]{in_1} \cdots \xrightarrow[]{in_n} S_{n+1} \\
+& \text{We have} ~~ PropertyHold(S_0), PropertyHold(S_1), \dots, PropertyHold(S_n)
+\end{align*}
+
+The property I verify for the induction step is:
+\begin{align*}
+& \forall ~~ \text{state $S_i$, input $in_i$, $in_{i+1}$}, \\
+& \text{Let} ~~ S_i \xrightarrow[]{in_i} S_{i+1} \xrightarrow[]{in_{i+1}} S_{i+2} \\
+& \text{We have} ~~ PropertyHold(S_{i+1}) \Rightarrow PropertyHold(S_{i+2})
+\end{align*}
+
+It is a little weird since why not just use:
+\begin{align*}
+& \forall ~~ \text{state $S_i$, input $in_i$}, \\
+& \text{Let} ~~ S_i \xrightarrow[]{in_i} S_{i+1} \\
+& \text{We have} ~~ PropertyHold(S_{i}) \Rightarrow PropertyHold(S_{i+1})
+\end{align*}
+
+
+
+
+\paragraph{A State Machine with Output.}
+
+And your security property is for each output.
+Formally,
+\begin{align*}
+& \forall ~~ \text{input} ~~ in_0, in_1, \dots, in_n, \\
+& \text{Let} ~~ S_0 \xrightarrow[out_0]{in_0} S_{1} \xrightarrow[out_1]{in_1} \cdots \xrightarrow[out_n]{in_n} S_{n+1} \\
+& \text{We have} ~~ PropertyHold(out_0), PropertyHold(out_1), \dots, PropertyHold(out_n)
+\end{align*}
+
+Now, formally, the property for the induction step is:
+\begin{align*}
+& \forall ~~ \text{state $S_i$, input $in_i$, $in_{i+1}$}, \\
+& \text{Let} ~~ S_i \xrightarrow[out_{i}]{in_i} S_{i+1} \xrightarrow[out_{i+1}]{in_{i+1}} S_{i+2} \\
+& \text{We have} ~~ PropertyHold(out_{i}) \Rightarrow PropertyHold(out_{i+1})
+\end{align*}
+
+\textbf{We need to define an arbitrary $out_i$ for induction. However, we need to define an arbitrary pre-states $S_i$ to represent the arbitrary $out_i$.}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%%% SECTIONS END %%%%
+%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

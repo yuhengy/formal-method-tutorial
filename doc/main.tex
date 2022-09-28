@@ -14,7 +14,7 @@
 
 
 %%%% Title Formats BEGIN %%%%
-\renewcommand\thesubsection{\thesection.\alph{subsection}}
+%\renewcommand\thesubsection{\thesection.\alph{subsection}}
 %%%% Title Formats END %%%%
 
 
@@ -61,67 +61,89 @@
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{A Note on Induction}
+\section{Compare the Property in Rosette and in Coq}
 
 
-\paragraph{A Mistake from Last Week.}
+\subsection{Property in Rosette.}
+
+\paragraph{Property to verify.}
 Last week, we have a state machine and want to verify a property hold for each state of the machine.
 Formally,
 \begin{align*}
-& \forall ~~ \text{input} ~~ in_0, in_1, \dots, in_n, \\
-& \text{Let} ~~ S_0 \xrightarrow[]{in_0} S_{1} \xrightarrow[]{in_1} \cdots \xrightarrow[]{in_n} S_{n+1} \\
-& \text{We have} ~~ PropertyHold(S_0), PropertyHold(S_1), \dots, PropertyHold(S_n)
+\forall &~~ \text{input} ~~ in_0, in_1, \dots, in_n, \\
+\text{Let} &~~ S_0 \xrightarrow[]{in_0} S_{1} \xrightarrow[]{in_1} \cdots \xrightarrow[]{in_n} S_{n+1} \\
+\text{If} &~~ \text{No smash in the $in_0, in_1, \dots, in_n$} \\
+\text{We have} &~~ PropertyHold(S_0), PropertyHold(S_1), \dots, PropertyHold(S_n)
 \end{align*}
 
+
+
+
+\paragraph{Property for induction step.}
 The property I verify for the induction step is:
 \begin{align*}
-& \forall ~~ \text{state $S_i$, input $in_i$, $in_{i+1}$}, \\
-& \text{Let} ~~ S_i \xrightarrow[]{in_i} S_{i+1} \xrightarrow[]{in_{i+1}} S_{i+2} \\
-& \text{We have} ~~ PropertyHold(S_{i+1}) \Rightarrow PropertyHold(S_{i+2})
+\forall &~~ \text{state $S_i$, input $in_i$, $in_{i+1}$}, \\
+\text{Let} &~~ S_i \xrightarrow[]{in_i} S_{i+1} \xrightarrow[]{in_{i+1}} S_{i+2} \\
+\text{If} &~~ \text{No smash in the $in_i, in_{i+1}$} \\
+\text{We have} &~~ PropertyHold(S_{i+1}) \Rightarrow PropertyHold(S_{i+2})
 \end{align*}
 
 It is a little weird since why not just use:
 \begin{align*}
-& \forall ~~ \text{state $S_i$, input $in_i$}, \\
-& \text{Let} ~~ S_i \xrightarrow[]{in_i} S_{i+1} \\
-& \text{We have} ~~ PropertyHold(S_{i}) \Rightarrow PropertyHold(S_{i+1})
+\forall &~~ \text{state $S_i$, input $in_i$}, \\
+\text{Let} &~~ S_i \xrightarrow[]{in_i} S_{i+1} \\
+\text{If} &~~ \text{No smash in the $in_i$} \\
+\text{We have} &~~ PropertyHold(S_{i}) \Rightarrow PropertyHold(S_{i+1})
 \end{align*}
 
-The answer is that yes, this bottom version definitely looks more natural for our toy example.
-The reason that I mistakenly use the above version is that I was used to the way I use induction on my CPU verification, which uses the above version.
-Now, let me explain why the above version is the one I use in my CPU, and eventually, you will realize induction can be more powerful than you think.
+The answer is that, yes, this bottom version definitely looks more natural for our toy example.
+However, the above version used by mistake because I was looking at the property from another perspective.
+I want to explain this other perspective because firstly, that is how I will define it in coq and in more other scenarios for convenience.
+And secondly this will help you understand that induction itself is more powerful than you might think.
 
 
 
 
-\paragraph{A State Machine with Output.}
+\subsection{Property in Coq.}
 
-In real design, you probably want a state machine to have output so that we can express our security property more easily.
-For example, your CPU may send something out through IO at each cycle, like print out some data on the screen.
-Formally, we denote a simulation step as:
+\paragraph{Property to verify.}
+Let's translate the property in following way:
 \begin{align*}
-S_i \xrightarrow[out_i]{in_i} S_{i+1}
+\forall &~~ \text{input} ~~ in_0, in_1, \dots, in_n, \\
+\text{We have} &~~ PropertyHold'(in_0, in_1, \dots, in_n)
 \end{align*}
+Here, stead of considering the property is a function on the state, we consider it as a function on the whole input sequence.
+And it says that with this input sequence, if there's no smash in it, then we run it on the state machine we defined from initial state, it should not violate property we defined above.
 
-And your security property may look like this output should not contain secret.
-Formally,
+
+
+
+\paragraph{Property for induction step.}
+Now, let's consider how to use the induction on this property.
+It is actually:
 \begin{align*}
-& \forall ~~ \text{input} ~~ in_0, in_1, \dots, in_n, \\
-& \text{Let} ~~ S_0 \xrightarrow[out_0]{in_0} S_{1} \xrightarrow[out_1]{in_1} \cdots \xrightarrow[out_n]{in_n} S_{n+1} \\
-& \text{We have} ~~ PropertyHold(out_0), PropertyHold(out_1), \dots, PropertyHold(out_n)
+\forall &~~ \text{input} ~~ in_0, in_1, \dots, in_i, in_{i+1}, \\
+\text{We have} &~~ PropertyHold'(in_0, in_1, \dots, in_i) \Rightarrow PropertyHold'(in_0, in_1, \dots, in_i, in_{i+1})
 \end{align*}
 
-Now, if you compare this property with the above one, the only difference is whether the property is for state or output.
-And when the property is for output, it can be a little difficult to think about the induction step of verification.
-The key is that, to represent $out_i$ and $out_{i+1}$, we need three states.
-Formally, the property for the induction step is:
+Note that this is exactly the version that we will prove in coq.
+
+
+
+
+\paragraph{Relate the coq property with Rosette property.}
+However how does this connect to our older induction step in rosette?
+We can try to expand this property a little bit.
 \begin{align*}
-& \forall ~~ \text{state $S_i$, input $in_i$, $in_{i+1}$}, \\
-& \text{Let} ~~ S_i \xrightarrow[out_{i}]{in_i} S_{i+1} \xrightarrow[out_{i+1}]{in_{i+1}} S_{i+2} \\
-& \text{We have} ~~ PropertyHold(out_{i}) \Rightarrow PropertyHold(out_{i+1})
+\forall &~~ \text{input} ~~ in_0, in_1, \dots, in_i, in_{i+1}, \\
+\text{Let} &~~ S_0 \xrightarrow[]{in_0} S_{1} \xrightarrow[]{in_1} \cdots \xrightarrow[]{in_n} S_{n} \xrightarrow[]{in_{n+1}} S_{n+2} \xrightarrow[]{in_{n+1}} S_{n+2} \\
+\text{We have} &~~ PropertyHold(S_{n+1}) \Rightarrow PropertyHold(S_{n+2})
 \end{align*}
 
-\textbf{We need to define an arbitrary $out_i$ for induction. However, we need to define an arbitrary pre-states $S_i$ to represent the arbitrary $out_i$.}
+To further become identical to the Rosette property we are verifying, we actually conservatively think the $S_{n}$ here can be an arbitrary state.
+
+
+
 
 
 

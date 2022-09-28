@@ -17,6 +17,7 @@
   (assume (input-not-smash input-n))
   (set! state (traffic-light-step state input-n))
   (assume (state-not-broken state))
+  ;(println (state-not-broken state))
 
 
   ; Induction assertion: ..., then it is also secure at (n+1)-cycle

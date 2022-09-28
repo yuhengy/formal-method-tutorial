@@ -49,8 +49,8 @@
 (define (example1)
   (println (traffic-light-step param-state-red param-input-notsmash))
 
-  (define-symbolic* input boolean?)
-  (println (traffic-light-step param-state-red input))
+  (define-symbolic* sym-input boolean?)
+  (println (traffic-light-step param-state-red sym-input))
 )
 
 (define (example2)

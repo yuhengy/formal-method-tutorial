@@ -10,7 +10,7 @@
   (define state param-state-red)
 
   ; check the property for 10 cycle
-  (for ([ignore (in-range param-simu-step)])
+  (for ([i (in-range param-simu-step)])
 
     ; use a symbolic input
     (define-symbolic* input boolean?)
@@ -23,6 +23,7 @@
 
     ; property to check
     (assert (state-not-broken state))
+    ;(println (vc))
   )
 
 )

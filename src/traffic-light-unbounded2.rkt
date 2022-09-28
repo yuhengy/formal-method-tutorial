@@ -26,6 +26,14 @@
   (set! state (traffic-light-step state input-n1))
   (assert (state-not-broken state))
 
+
+  ;(error-print-width 1000)
+  (println "--------------------")
+  (println (vc-assumes (vc)))
+  (println "--------------------")
+  (println (vc-asserts (vc)))
+  (println "--------------------")
+
 )
 
 

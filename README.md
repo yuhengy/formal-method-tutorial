@@ -104,7 +104,7 @@ We want to verify a property:
 
 
 
-## Bounded Model Checking
+## Symbolic Exectution (Bounded)
 
 - Goal: verify a property on a system for x steps
 - 3 Steps:
@@ -116,7 +116,7 @@ We want to verify a property:
 
 
 
-## Unbounded Model Checking
+## Symbolic Exectution (Unbounded)
 
 - Goal: how to extend x steps to infinite steps?
 
@@ -143,6 +143,18 @@ We want to verify a property:
 ## coq Proof
 
   ... TODO ...
+
+Fundamentally, we can express most hardware verification problems symbolically as logical formulas, and if we assume infinite power of our SMT solvers, we would be able to just push a button and get an answer.
+However, SMT solver can solve it very slowly
+This is because SMT solvers try to simplify and solve logical statements without knowledge of the system so it works at a very low level but with a lot of automation.
+
+From this perspective, if you really want to understand what coq is doing from SMT solver way, it actually allow us to do the SMT solver's work step by step with hand.
+For example, in coq here, we clearly specify how to use the induction hypothesis to help get some property for the property.
+Specifically, we tell coq "execute n+1 step actually" means "based on n step's state, execute 1 more step", and from a SMT solver perspective, we are telling it "see, there is some common fomula you can replace".
+In complex coq examples, we can actually consider it as a very fancy way to simplify logic fomulas with our understanding of the system.
+
+
+Whereas, if you just want to understand coq itself, without relating it to SMT solver, it let's you simplify/reason at a higher more abstract level, but more manually.
 
 
 

@@ -2,7 +2,7 @@ version: "3.9"
 services:
   env:
     #build: .
-    image: yuhengy/formal-tutorial
+    image: yuhengy/formal-method-tutorial
     volumes:
       - .:/workspace
     stdin_open: true # docker run -i

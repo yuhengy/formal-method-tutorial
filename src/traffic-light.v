@@ -10,6 +10,20 @@ Inductive inputs :=
 | nil
 | cons (inps: inputs) (inp: input).
 
+(* inputs examples
+nil
+cons nil Smash
+cons (cons nil Smash) Smash
+*)
+
+(* example of defining natural numbers
+Inductive nat :=
+   | 0
+   | S (n: nat).
+*)
+
+
+
 Inductive state :=
 | Red
 | Green
@@ -37,6 +51,8 @@ Fixpoint steps (st: state) (inps : inputs) :=
 Theorem test_program:
     steps Red (cons (cons (cons (cons nil Notsmash) Notsmash) Notsmash) Smash) = Broken.
 Proof.
+  (* simplify. *)
+  unfold step.
   unfold steps.
   unfold step at 4.
   unfold step at 3.
@@ -70,7 +86,7 @@ Proof.
     apply IHinps in H.
 
     unfold step.
-    cases (steps Red inps).
+    cases (steps Red inps). (* ; (try equality). *)
     + cases inp.
       * contradiction.
       * equality.

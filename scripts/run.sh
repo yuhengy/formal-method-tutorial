@@ -5,6 +5,7 @@
 
 
 ## docker
+# docker pull yuhengy/formal-method-tutorial # update the image
 # docker compose up -d
 # docker compose exec env bash --login
 # docker compose stop

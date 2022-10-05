@@ -82,14 +82,14 @@
 \begin{itemize}
   \item<1-> RTL refines ISA \onslide<9->{{\color{red} regarding to commit cycle of each instruction. (How to define the commit cycle of a OoO CPU?)}}
   \item<2-> 1-cycle ALU refines symbolic-cycle ALU \onslide<8->{{\color{red} regarding to RTL implementations.}}
-  \item<3-> 1-entry FIFO refines 2-entry FIFO \onslide<7->{{\color{red} regarding to enq(), deq() event sequences.}} \onslide<11->{{\color{red} Bluespec cares about event, Verilog cares about signals}}
+  \item<3-> 1-entry FIFO refines 2-entry FIFO \onslide<7->{{\color{red} regarding to enq(), deq() event sequences.}} \onslide<10->{{\color{red} Bluespec cares about event, Verilog cares about signals}}
   \alt<1-6>{\begin{itemize}
     \item<4-6> compare the enqueue(), dequeue() trace of the FIFO
     \item<5-6> 1-entry: enq(), deq(), enq(), deq() ...
     \item<5-6> 2-entry: enq(), deq() ... or enq(), enq(), deq(), ... or ...
     \item<6> Not correct in Verilog, is a good property in Bluespec
   \end{itemize}}
-  \item \onslide<12-> The real implementation refines our model in the paper regarding to ... :)
+  \item \onslide<11-> The real implementation refines our model in the paper regarding to the property we care :)
 \end{itemize}
 \end{frame}
 
@@ -103,7 +103,7 @@
 \begin{itemize}
   \item<1-> RTL Implementation
   \item<2-> RTL, but replace ALU with a symbolic-cycle ALU
-  \item<2-> RTL, but replace all caches with symbolic-cyle MEM
+  \item<2-> RTL, but replace all caches with symbolic-cycle MEM
   \item<1-> ISA Specification: A set of implementations
 \end{itemize}
 \end{frame}
@@ -119,7 +119,7 @@
   \item<2-> Safety property and Liveness property
   \begin{itemize}
     \item<3-> Safety property: something bad will not happen
-    \item<3-> Liveness property: something good will eventually happen (no live lock)
+    \item<3-> Liveness property: something good will eventually happen (no dead/live lock)
   \end{itemize}
   \item<4-> Single-trace property and Hyperproperty
 \end{itemize}
@@ -164,7 +164,7 @@
   \begin{align*}
     & \text{$x_1$ not interfere $y_1$} ~~ \text{iff} \\
     \forall ~~& x_1, x_2, \\
-    \text{let} ~~& yt_1, yt_2 = ft(x_1, xt_1, x_2, xt_2), \\
+    \text{let} ~~& yt_1, yt_2 = ft(x_1, 1, x_2, 0), \\
     \text{we have}, ~~& yt_1 = 0
   \end{align*}
 \end{itemize}
@@ -181,7 +181,7 @@
   \begin{align*}
     & \text{$x_1$ not interfere $y_1$} ~~ \text{iff} \\
     \forall ~~& x_1, x_2, \\
-    \text{let} ~~& yt_1, yt_2 = ft(x_1, xt_1, x_2, xt_2), \\
+    \text{let} ~~& yt_1, yt_2 = ft(x_1, 1, x_2, 0), \\
     \text{we have}, ~~& yt_1 = 0
   \end{align*}
   \item<2-> Finally, let me show a tool to automatically augment verilog with Taint functions. \onslide<3->{{\color{red} More tools (JasperGold and $\sim$100 more are coming \url{http://mtlcad.mit.edu/setup.html}).}}
@@ -196,7 +196,7 @@
 \begin{itemize}
   \item<1-> Augment at each gate
   \item<2-> When compose gates together or compose cycles together, will be conservative.
-  \item<1-> More on \url{https://ieeexplore.ieee.org/document/5948366}
+  \item<3-> More on \url{https://ieeexplore.ieee.org/document/5948366}
 \end{itemize}
 \end{frame}
 

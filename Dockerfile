@@ -39,6 +39,21 @@ RUN apt-get update
 RUN apt-get install -y opam
 
 
+# STEP verilator
+RUN apt-get update
+RUN apt-get install -y git perl python3 make autoconf g++ flex bison ccache libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev zlibc zlib1g zlib1g-dev
+RUN git clone https://github.com/verilator/verilator
+RUN cd verilator && git pull && git checkout v4.224 && unset VERILATOR_ROOT && autoconf && ./configure && make -j4 && make install &&cd .. && rm -rf verilator
+
+
+# STEP oss-cad-suite (yosys)
+RUN wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2022-09-01/oss-cad-suite-linux-x64-20220901.tgz
+RUN tar -zxf oss-cad-suite-linux-x64-20220901.tgz
+#RUN mv oss-cad-suite /oss-cad-suite
+RUN rm oss-cad-suite-linux-x64-20220901.tgz
+RUN echo "export PATH=/oss-cad-suite/bin:$PATH" >> /home/vagrant/.bashrc
+
+
 
 
 

@@ -9,7 +9,7 @@
 # docker compose exec env bash --login
 # docker compose stop
 # docker compose down --rmi all
-# cd workspace
+# cd /vagrant
 
 
 

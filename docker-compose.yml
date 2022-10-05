@@ -4,6 +4,6 @@ services:
     #build: .
     image: yuhengy/formal-method-tutorial
     volumes:
-      - .:/workspace
+      - .:/vagrant
     stdin_open: true # docker run -i
     tty: true        # docker run -t

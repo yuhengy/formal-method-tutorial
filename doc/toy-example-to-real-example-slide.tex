@@ -1,0 +1,211 @@
+\documentclass{beamer}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% PREAMBLES BEGIN %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\usetheme{Berlin}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsubsection]
+  \end{frame}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%% PREAMBLES END %%%%
+%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+\title{Formal Method on Hardware Security}
+\author{}
+\institute{}
+\date{Oct 2022}
+
+\begin{document}
+
+\frame{\titlepage}
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% SECTIONS BEGIN %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+
+
+
+
+\section{CPU Models}
+
+\begin{frame}
+\frametitle{CPU Models}
+\begin{itemize}
+  \Large
+  \item<1-> RTL Implementation
+  \item<2-> ISA Specification\onslide<3->{: A set of implementations}
+\end{itemize}
+\end{frame}
+
+
+
+
+\section{Refinement Property}
+
+\begin{frame}
+\frametitle{Refinement Property}
+\begin{itemize}
+  \item<1-> RTL refines ISA \onslide<9->{{\color{red} regarding to commit cycle of each instruction. (How to define the commit cycle of a OoO CPU?)}}
+  \item<2-> 1-cycle ALU refines symbolic-cycle ALU \onslide<8->{{\color{red} regarding to RTL implementations.}}
+  \item<3-> 1-entry FIFO refines 2-entry FIFO \onslide<7->{{\color{red} regarding to enq(), deq() event sequences.}} \onslide<11->{{\color{red} Bluespec cares about event, Verilog cares about signals}}
+  \alt<1-6>{\begin{itemize}
+    \item<4-6> compare the enqueue(), dequeue() trace of the FIFO
+    \item<5-6> 1-entry: enq(), deq(), enq(), deq() ...
+    \item<5-6> 2-entry: enq(), deq() ... or enq(), enq(), deq(), ... or ...
+    \item<6> Not correct in Verilog, is a good property in Bluespec
+  \end{itemize}}
+  \item \onslide<12-> The real implementation refines our model in the paper regarding to ... :)
+\end{itemize}
+\end{frame}
+
+
+
+
+\section{More CPU Models}
+
+\begin{frame}
+\frametitle{More CPU Models}
+\begin{itemize}
+  \item<1-> RTL Implementation
+  \item<2-> RTL, but replace ALU with a symbolic-cycle ALU
+  \item<2-> RTL, but replace all caches with symbolic-cyle MEM
+  \item<1-> ISA Specification: A set of implementations
+\end{itemize}
+\end{frame}
+
+
+
+\section{More Properties on CPU}
+
+\begin{frame}
+\frametitle{More Properties on CPU}
+\begin{itemize}
+  \item<1-> Example: Memory Safety: any memory read/write instruction should within the boundary
+  \item<2-> Safety property and Liveness property
+  \begin{itemize}
+    \item<3-> Safety property: something bad will not happen
+    \item<3-> Liveness property: something good will eventually happen (no live lock)
+  \end{itemize}
+  \item<4-> Single-trace property and Hyperproperty
+\end{itemize}
+\end{frame}
+
+
+
+\subsection{Single-trace Property and Hyperpropert}
+
+\begin{frame}
+\frametitle{Single-trace Property and Hyperproperty}
+\begin{itemize}
+  \item<1-> Memory Safety: any memory read/write instruction should within the boundary
+  \item<2-> Non-interference property: Say we have a combinational function $y_1, y_2 = f(x_1, x_2)$
+  \begin{align*}
+    & \text{$x_1$ not interfere $y_1$} ~~ \text{iff} \\
+    \forall ~~& x_1, x_1', x_2, \\
+    \text{let} ~~& y_1, y_2 = f(x_1, x_2), \\
+    ~~~~~~& y_1', y_2' = f(x_1', x_2), \\
+    \text{we have}, ~~& y_1 = y_1'
+  \end{align*}
+  \item<3-> Hyperproperty is a property on a multiple traces
+\end{itemize}
+\end{frame}
+
+
+
+\subsection{Example: Non-interference Property}
+
+\begin{frame}
+\frametitle{Example: Non-interference Property}
+\begin{itemize}
+  \item<1-> A property on a pair of execution traces: for a function $y_1, y_2 = f(x_1, x_2)$:
+  \begin{align*}
+    & \text{$x_1$ not interfere $y_1$} ~~ \text{iff} \\
+    \forall ~~& x_1, x_1', x_2, \\
+    \text{let} ~~& y_1, y_2 = f(x_1, x_2), \\
+    ~~~~~~& y_1', y_2' = f(x_1', x_2), \\
+    \text{we have}, ~~& y_1 = y_1'
+  \end{align*}
+  \item<2-> Verify it with single trace: taint analysis: for a function $y_1, y_2 = f(x_1, x_2)$, we design an augment $yt_1, yt_2 = ft(x_1, xt_1, x_2, xt_2)$, such that:
+  \begin{align*}
+    & \text{$x_1$ not interfere $y_1$} ~~ \text{iff} \\
+    \forall ~~& x_1, x_2, \\
+    \text{let} ~~& yt_1, yt_2 = ft(x_1, xt_1, x_2, xt_2), \\
+    \text{we have}, ~~& yt_1 = 0
+  \end{align*}
+\end{itemize}
+\end{frame}
+
+
+
+\subsection{An Estimation Scheme: Taint Analysis}
+
+\begin{frame}
+\frametitle{An Estimation Scheme: Taint Analysis}
+\begin{itemize}
+  \item<1-> Taint analysis: for a function $y_1, y_2 = f(x_1, x_2)$, we design an augment $yt_1, yt_2 = ft(x_1, xt_1, x_2, xt_2)$, such that:
+  \begin{align*}
+    & \text{$x_1$ not interfere $y_1$} ~~ \text{iff} \\
+    \forall ~~& x_1, x_2, \\
+    \text{let} ~~& yt_1, yt_2 = ft(x_1, xt_1, x_2, xt_2), \\
+    \text{we have}, ~~& yt_1 = 0
+  \end{align*}
+  \item<2-> Finally, let me show a tool to automatically augment verilog with Taint functions. \onslide<3->{{\color{red} More tools (JasperGold and $\sim$100 more are coming \url{http://mtlcad.mit.edu/setup.html}).}}
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Taint Analysis: Gate-Level Information Flow Tracking (GLIFT)}
+\begin{itemize}
+  \item<1-> Augment at each gate
+  \item<2-> When compose gates together or compose cycles together, will be conservative.
+  \item<1-> More on \url{https://ieeexplore.ieee.org/document/5948366}
+\end{itemize}
+\end{frame}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%%% SECTIONS END %%%%
+%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

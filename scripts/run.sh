@@ -35,3 +35,10 @@
 # https://www.cs.cornell.edu/courses/cs3110/2018sp/a5/coq-tactics-cheatsheet.html
 
 
+
+
+## Run verilator and GLIFT
+# python3 scripts/run_verilator.py src/MUX_top.v # waveform is generated at build/MUX_top/myVCD.vcd
+# python3 scripts/run_yosys.py src/MUX.ys # The augmented src/MUX_t.v is generated. Figure figures/MUX.svg and figures/MUX_t.svg are generated.
+# python3 scripts/run_verilator.py src/MUX_t_top.v
+

@@ -1,0 +1,18 @@
+# read design
+read_verilog src/MUX.v
+hierarchy -check
+
+
+# high-level synthesis
+proc; opt; memory; opt; fsm; opt
+show -format svg -prefix figures/MUX
+
+
+# GLIFT
+techmap
+glift -create-precise-model -keep-outputs
+
+
+# show
+show -format svg -prefix figures/MUX_t
+write_verilog src/MUX_t.v
